@@ -162,7 +162,67 @@ if(NaN){
 //forech kabhi b by default aapke array mei change nhi karta wo aapko changes krke deta hai array ko temprory copy par jiske wajah se array humesha same rehta hai
 
 var a = [1,2,3,4,5,6,7,8,9,10];
+a.forEach(element => {
+    console.log(element*2);
+});
 
 //for in - objects par kam krne ke liye hotai h forin loop
 
+var obj = {
+    name: "Akhilesh",
+    age: "32",
+    city: "Jabalpur"
+}
+
+for(let key in obj){
+    console.log(key +":"+ obj[key]);
+}
+
+//Functions ✅
+//functions == code ko naam dena
+//functions ka matlab aap kch code ko likh kar koi naam de skte ho and baad mei use kr skte ho as many times
+//functions mainly teen kaam ke liye hote h
+//1. jab aapka code aap turant nhi chalana chaate future mein chaalana chaate ho
+//2. jab aapka code aap reuse krna chahte ho
+//3. jab aap code chalana chaahte ho har baar with different data.
+
+
+//Callback functions ✅
+//jab bhi koi aisa code jo baad mei chalta hai aap likhoge, kyuki woh code baad mei chalta hai js ko ye pta nhi hota ke wo complete hua ya nahi,
+//aise code ke completion par js ko btaya jaata hai ke woh complete ho gya aur aap use chala skte ho, ye batane ka kaam callback ka hai
+//aisa cide jo baad mei chalta hai use hum ek function de dete hai ke bhaiya jab complete ho jaana to ye function chala dena, aur wo function
+//jo hum dete hai wo ek normail func hi hota h, aur use kahte hai callback func.
+
+//first class functions ✅
+//js mei ek concept hai jiska matlab hota hai ki app function ko use kar sakte ho as value
+
+function xyz(f){
+    f();
+}
+xyz(function(){console.log("Hello");})
+
+
+//Array behind the scenes ✅
+var arr = [1,2,3,4]; // this get converts into object like "arr = { 0:1, 1:2, 2:3, 3:4}"
+//If you will check in browser type of [] then output is object
+//If you will check in browser type of {} then output is object
+//If you will check above in browser console for eg. TypeOf arr, then this will return you object
+
+//In Js you can negative index in array
+arr[-1] = 2; 
+// If you will print above in browser console then it will give show you output as (4) [1, 2, 3, 4, -1: 2]
+
+//correct way to check the type of array is : Array.isArray([]) o/p : true 
+//correct way to check the type of array is : Array.isArray({}) o/p : false 
+
+
+//how to delete prop from object ✅
+var a = {
+    name: "Akhilesh",
+    age: 32
+}
+
+delete a.name;
+
+// type "a" in browser console o/p will be {age: 32}
 
