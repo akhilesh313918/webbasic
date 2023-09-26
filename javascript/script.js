@@ -226,3 +226,212 @@ delete a.name;
 
 // type "a" in browser console o/p will be {age: 32}
 
+
+
+//Advance JS
+//*******************
+
+//Higher order function  ✅
+//Aisa function jo accept krle ek or function ya fr jo retur krde ek aur function
+//for eg forEach is a higher order func.
+var arr = [1,2,4,5,6,7];
+arr.forEach((e) => {
+console.log(e);
+})
+
+//Constructor function
+// normal function jismei this ka istemaal ho and aap func ko call krte waqt new keyword ka use kre
+//jb apke pass aisa koi b mauka ho ke aapko ek jaise properties wale bhut saare elements banaane hai us waqt aap constructor function use kr sket ho
+
+//parle g buiscut ka example
+function buscuitBanao(){
+    this.height = 12;
+    this.widht = 8;
+    this.color = "brown";
+    this.taste = "Sugary";
+}
+
+var bis1 = new buscuitBanao();
+var bis2 = new buscuitBanao();
+var bis3 = new buscuitBanao();
+
+//First class functions ✅
+//first class function ko hm variable mei store kr skte h, we can save them as variable or we can pass them as a function
+
+var fcfn = function(){
+console.log("fcfn called after 5 sec")
+}
+
+setTimeout(fcfn,5000);
+
+//new keyword ✅
+// new => jab bhi new lagta hai humesha ek blank object apne man mei bna lo
+
+//iife ✅
+//iife = > immedieately invoked function expression
+//iife hai function ko turant chalane ki kala, is tareeke se ki hum log koi private variable bana paaye.
+
+// way to write iife -> function(){})()
+
+var ans = (function(){
+    var privateval = 12;
+
+    return{
+        getter: function(){
+            console.log(privateval);
+        },
+        setter: function(val){
+            privateval = val;
+        }
+    }
+})()
+
+//change getter and setter in your browser console, you will se o/p
+
+//prototype✅
+//prototype contains many helper properties and methods which we can use to complete out task, let's say we create an array and we want to know length of it,
+//what do we do, use .length property on array, did we created .length on that array, no! but it still contains .length, the question is how ?
+// the answer is, manu properties and methods are already available to use built by javascript creators inside protoype of every object
+
+var obj = {name: "Akhilesh"};// In browser console type obj, you will see an extra property called [[prototype]] 
+
+//prototypal inheritance ✅
+var human = {
+    canFly: false,
+    canTalk: true,
+    canWalk: true,
+    haveEmotions: true,
+    haveEmotions: true,
+    hasFourLegs: false
+}
+
+var sheriyansStudent = {
+    canMakeAmazingWebsite: true,
+    canMakeAwesomeAnimations: true,
+    canMakeWorldClassAwardedWebsites: true
+}
+
+sheriyansStudent.__proto__ = human;
+
+//this Call Apply bind ✅
+// this keyword ✅
+// jab bhi kuch likh rhe ho check kro kya usemein kahi bhi koi function, object ya fir scope bana hai {}
+// jb bhi koi cheej {} brackects ke andar nhi hoti to hum use global scope khate h
+
+
+//this✅
+var a = 12; // global scope
+
+function abcd(){
+    var a =12 ; // local scope
+}
+
+console.log(this) // o/p: window
+
+function abcd(){
+    console.log(this) ; // o/p: window
+}
+abcd()
+
+//ek function ko object ke andar ho use hm method khate h
+//global => window
+//global => window
+
+//method => obj
+var obj = {
+    helloBolo : function(){
+        console.log(this)
+    }
+}
+obj.helloBolo();
+
+//value of this in event listener is always return a object which written before eventlistener for button.addEventListener("click", function(){ console.log(this)}) //o/p: button
+var button = document.querySelector("button");
+button.addEventListener("click", function(){
+    console.log(this);
+    this.style.color="red";
+});
+
+//call apply bind✅
+// agar tumhare pass koi function hai and koi object hai and tumhe fnc chalana hai aur by default jo this ki value window hai use window naa rakh kr point karwana hai kisi object ki taraf
+
+//call✅
+//ex1 passing only object
+function abcd(){
+    console.log(this);// by default iski value window hogi, lekin jb ka function chalage toh woh window kisi dusre object se replace kr dega
+}
+
+var obj = {age: 24}
+
+abcd.call(obj) // o/p: {age: 24}
+
+//ex2 passing both object and values
+function abcd(val1 , val2, val3){
+    console.log(this, val1 , val2, val3);
+}
+
+var obj = {age: 24}
+
+abcd.call(obj,1,2,3) //{age: 24} 1 2 3
+
+//apply ✅
+//call or apply mei bahut thoda sa farak, call hm obj ke sath multiples values(1,2,3) send kr rhe the, but apply mei hm wahi values array ke form [1,2,3] mei send karenge
+
+function abcd(val1 , val2, val3){
+    console.log(this, val1 , val2, val3);
+}
+
+var obj = {age: 24}
+
+abcd.call(obj,[1,2,3]) //{age: 24} 1 2 3
+
+//***IMP*** call or apply hm tb use krte h jb hme this ki value ko kisi obj se replace krni hoti h
+
+//bind✅
+function abcd(){
+    console.log(this);
+}
+
+var obj = {age: 24}
+
+var bindedfnc = abcd.bind(obj);
+bindedfnc(); //o/p: {age: 24}
+
+
+//pure & impure fncs ✅
+//pure function is any function which has these 2 features :
+// i) it should always return same out put for same input
+// ii) it will never change/update the value of a global variable.
+
+//Ex1 impure function
+function abcdef(val){
+    return Math.random() * val;
+}
+
+console.log(abcdef(1)); //0.5817418772297125
+console.log(abcdef(1)); //0.501749329563639
+
+//Ex1=2impure function
+var global = 12;
+function abcdef(val){
+    global = 13 * val;
+    return global;
+}
+
+console.log(abcdef(1)); //13
+
+//Ex 3 pure function
+function abcdefg(val1, val2){
+    return val1 + val2;
+}
+
+console.log(abcdefg(2,3)); //5
+console.log(abcdefg(2,3)); //5
+
+
+
+
+
+
+
+
