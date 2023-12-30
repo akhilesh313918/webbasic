@@ -195,8 +195,10 @@ function calcSubTotal(){
 		sum = +(sum) + +(totals[i].value);
 	}
 	console.log("sum - "+sum)
-	document.getElementById("subtotal").value = sum;
+	document.getElementById("subtotal").value = (sum).toFixed(2);
 	calcCgst();
+	calcSgst();
+	calcIgst()
 	calcNetTotal();
 }
 
@@ -204,21 +206,28 @@ function calcCgst(){
 	//console.log("calcCgst "+e.value);
 	let subtotal = document.getElementById("subtotal").value;
 	let cgstSelect = document.getElementById("cgstSelect").value;
-	document.getElementById("cgst").value = subtotal*(cgstSelect*(0.1));
+	document.getElementById("cgst").value = (subtotal*(cgstSelect*(0.1))).toFixed(2);
+	calcNetTotal();
 }
 
-function calcSgst(e){
-	alert(e.value)
+function calcSgst(){
+	let subtotal = document.getElementById("subtotal").value;
+	let sgstSelect = document.getElementById("sgstSelect").value;
+	document.getElementById("sgst").value = (subtotal*(sgstSelect*(0.1))).toFixed(2);
 	calcNetTotal();
 }
 
 function calcIgst(e){
-	alert(e.value)
+	let subtotal = document.getElementById("subtotal").value;
+	let igstSelect = document.getElementById("igstSelect").value;
+	document.getElementById("igst").value = (subtotal*(igstSelect*(0.1))).toFixed(2);
 	calcNetTotal();
 }
 
 function calcNetTotal(){
 	let subtotal = document.getElementById("subtotal").value;
 	let cgst = document.getElementById("cgst").value;
-	document.getElementById("nettotal").value = +(subtotal) + +(cgst);
+	let sgst = document.getElementById("sgst").value;
+	let igst = document.getElementById("igst").value;
+	document.getElementById("nettotal").value = Math.floor(+(subtotal) + +(cgst) + +(sgst) + +(igst));
 }

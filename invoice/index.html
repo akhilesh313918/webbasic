@@ -104,9 +104,9 @@
                     aria-describedby="basic-addon1"
                   />
                 </div>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                   <button type="button" class="btn btn-primary addRow" onclick="onAdd()">Add Row</button>
-                </div>
+                </div> -->
               </div>
             </div>
 
@@ -118,7 +118,7 @@
                   <th scope="col">description</th>
                   <th scope="col">HSN code</th>
                   <th scope="col" class="text-end">Qty</th>
-                  <th scope="col" class="text-end">Rate</th>
+                  <th scope="col" class="text-end">Rate (In Rs.)</th>
                   <th scope="col" class="text-end">Total</th>
                   <th scope="col"><i class="fa-solid fa-plus" onclick="onAdd()"></i></th>
                 </tr>
@@ -211,8 +211,8 @@
                 </div>
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1">CGST%</span>
-                  <select class="form-select-sm" id="cgstSelect" onchange="calcCgst(this);">
-                    <option selected>5</option>
+                  <select class="form-select-sm" id="cgstSelect" onchange="calcCgst()">
+                    <option selected>0</option>
                     <option value="2">2</option>
                     <option value="4">4</option>
                     <option value="6">6</option>
@@ -229,8 +229,8 @@
                 </div>
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1">SGST%</span>
-                  <select class="form-select-sm" name="sgst" onchange="calcSgst(this);">
-                    <option selected>5</option>
+                  <select class="form-select-sm" id="sgstSelect" onchange="calcSgst()">
+                    <option selected>0</option>
                     <option value="2">2</option>
                     <option value="4">4</option>
                     <option value="6">6</option>
@@ -247,8 +247,8 @@
                 </div>
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1">IGST%</span>
-                  <select class="form-select-sm" name="igst" onchange="calcIgst(this);">
-                    <option selected>5</option>
+                  <select class="form-select-sm" id="igstSelect" onchange="calcIgst()">
+                    <option selected>0</option>
                     <option value="2">2</option>
                     <option value="4">4</option>
                     <option value="6">6</option>
@@ -264,7 +264,7 @@
                   />
                 </div>
                 <div class="input-group mb-3">
-                  <span class="input-group-text" id="basic-addon1">Total</span>
+                  <span class="input-group-text" id="basic-addon1">Total (In Rs.)</span>
                   <input
                     type="number"
                     name="nettotal"
