@@ -17,7 +17,6 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <form action="" id="invoiceForm">
       <div class="container">
         <ul class="nav">
           <li class="nav-item">
@@ -33,6 +32,7 @@
             <a class="nav-link" href="products.html">Products</a>
           </li>
         </ul>
+        <form action="" id="invoiceForm">
         <div class="card">
           <div class="card-header text-center">
             <h4>INVOICE</h4>
@@ -46,12 +46,15 @@
                   >
                   <input
                     type="text"
+                    id="customerName";
                     name="customerName"
                     class="form-control"
                     placeholder="Customer"
-                    aria-label="Customer"
-                    aria-describedby="basic-addon1"
+                    onclick="loadCustomer()"
+                    required
                   />
+                </div>
+                <div id="customerList" className="customerList">
                 </div>
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1"
@@ -59,22 +62,26 @@
                   >
                   <input
                     type="text"
+                    id="Address&Phone"
                     name="Address&Phone"
                     class="form-control"
                     placeholder="Address & Phone"
                     aria-label="Customer"
                     aria-describedby="basic-addon1"
+                    required
                   />
                 </div>
                 <div class="input-group mb-3">
                   <span class="input-group-text" id="basic-addon1">GST</span>
                   <input
                     type="text"
+                    id="gstNum"
                     name="gstNum"
                     class="form-control"
                     placeholder="GST No."
                     aria-label="Customer"
                     aria-describedby="basic-addon1"
+                    required
                   />
                 </div>
               </div>
@@ -86,10 +93,10 @@
                   <input
                     type="text"
                     name="invoiceNum"
+                    id="invoiceNum"
                     class="form-control"
                     placeholder="Inv. No."
-                    aria-label="Customer"
-                    aria-describedby="basic-addon1"
+                    disabled
                   />
                 </div>
 
@@ -102,6 +109,7 @@
                     placeholder="Date"
                     aria-label="Customer"
                     aria-describedby="basic-addon1"
+                    required
                   />
                 </div>
                 <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -131,6 +139,7 @@
                       name="productName"
                       type="text"
                       class="form-control"
+                      required
                     />
                   </td>
                   <td>
@@ -138,6 +147,7 @@
                       name="description"
                       type="text"
                       class="form-control text-end"
+                      required
                     />
                   </td>
                   <td>
@@ -145,6 +155,7 @@
                       name="hsncode"
                       type="number"
                       class="form-control text-end"
+                      required
                     />
                   </td>
                   <td>
@@ -153,6 +164,7 @@
                       type="number"
                       class="form-control text-end"
                       onchange="calc(this);"
+                      required
                     />
                   </td>
                   <td>
@@ -161,6 +173,7 @@
                       type="number"
                       class="form-control text-end"
                       onchange="calc(this);"
+                      required
                     />
                   </td>
                   <td>
@@ -168,6 +181,7 @@
                       name="total"
                       type="number"
                       class="form-control text-end"
+                      disabled
                     />
                   </td>
                   <td>
@@ -205,8 +219,8 @@
                     id="subtotal"
                     class="form-control"
                     placeholder=""
-                    aria-label="Customer"
-                    aria-describedby="basic-addon1"
+                    disabled
+                    required
                   />
                 </div>
                 <div class="input-group mb-3">
@@ -223,8 +237,8 @@
                     id="cgst"
                     class="form-control"
                     placeholder=""
-                    aria-label="Customer"
-                    aria-describedby="basic-addon1"
+                    disabled
+                    required
                   />
                 </div>
                 <div class="input-group mb-3">
@@ -241,8 +255,8 @@
                     id="sgst"
                     class="form-control"
                     placeholder=""
-                    aria-label="Customer"
-                    aria-describedby="basic-addon1"
+                    disabled
+                    required
                   />
                 </div>
                 <div class="input-group mb-3">
@@ -259,8 +273,8 @@
                     id="igst"
                     class="form-control"
                     placeholder=""
-                    aria-label="Customer"
-                    aria-describedby="basic-addon1"
+                    disabled
+                    required
                   />
                 </div>
                 <div class="input-group mb-3">
@@ -271,8 +285,8 @@
                     id="nettotal"
                     class="form-control"
                     placeholder=""
-                    aria-label="Customer"
-                    aria-describedby="basic-addon1"
+                    disabled
+                    required
                   />
                 </div>
               </div>

@@ -58,11 +58,12 @@
                 <span class="input-group-text" id="basic-addon1">Customer</span>
                 <input
                   type="text"
-                  name="customerName"
-                  class="form-control"
-                  placeholder="Customer"
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                  id="customerName";
+                    name="customerName"
+                    class="form-control"
+                    placeholder="Customer"
+                    onclick="loadCustomer()"
+                    required
                   value="${data.customerName}"
                 />
               </div>
@@ -70,11 +71,13 @@
                 <span class="input-group-text" id="basic-addon1">Address & Phone</span>
                 <input
                   type="text"
-                  name="Address&Phone"
-                  class="form-control"
-                  placeholder="Address & Phone"
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                  id="Address&Phone"
+                    name="Address&Phone"
+                    class="form-control"
+                    placeholder="Address & Phone"
+                    aria-label="Customer"
+                    aria-describedby="basic-addon1"
+                    required
                   value="${data.addressAndPhone}"
                 />
               </div>
@@ -82,11 +85,13 @@
                 <span class="input-group-text" id="basic-addon1">GST</span>
                 <input
                   type="text"
-                  name="gstNum"
-                  class="form-control"
-                  placeholder="GST No."
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                  id="gstNum"
+                    name="gstNum"
+                    class="form-control"
+                    placeholder="GST No."
+                    aria-label="Customer"
+                    aria-describedby="basic-addon1"
+                    required
                   value="${data.gstNum}"
                 />
               </div>
@@ -97,10 +102,10 @@
                 <input
                   type="text"
                   name="invoiceNum"
-                  class="form-control"
-                  placeholder="Inv. No."
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                    id="invoiceNum"
+                    class="form-control"
+                    placeholder="Inv. No."
+                    disabled
                   value="${data.id}"
                 />
               </div>
@@ -117,9 +122,6 @@
                   value="${data.date}"
                 />
               </div>
-              <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                  <button type="button" class="btn btn-primary addRow" onclick="onAdd()">Add Row</button>
-                </div>
             </div>
           </div>
 
@@ -133,7 +135,7 @@
                 <th scope="col" class="text-end">Qty</th>
                 <th scope="col" class="text-end">Rate</th>
                 <th scope="col" class="text-end">Total</th>
-                <th scope="col"></th>
+                <th scope="col"><i class="fa-solid fa-plus" onclick="onAdd()"></i></th>
               </tr>
             </thead>
             <tbody>
@@ -163,56 +165,79 @@
                   >Sub Total</span
                 >
                 <input
-                  type="number"
-                  name="subtotal"
-                  class="form-control"
-                  placeholder=""
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                type="number"
+                    name="subtotal"
+                    id="subtotal"
+                    class="form-control"
+                    placeholder=""
+                    disabled
+                    required
                 />
               </div>
               <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">CGST</span>
-                <input
-                  type="number"
-                  name="cgst"
-                  class="form-control"
-                  placeholder=""
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                <span class="input-group-text" id="basic-addon1">CGST%</span>
+                  <select class="form-select-sm" id="cgstSelect" onchange="calcCgst()">
+                    <option selected>0</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                  </select>
+                  <input
+                    type="number"
+                    name="cgst"
+                    id="cgst"
+                    class="form-control"
+                    placeholder=""
+                    disabled
+                    required
                 />
               </div>
               <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">SGST</span>
-                <input
-                  type="number"
-                  name="sgst"
-                  class="form-control"
-                  placeholder=""
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                <span class="input-group-text" id="basic-addon1">SGST%</span>
+                  <select class="form-select-sm" id="sgstSelect" onchange="calcSgst()">
+                    <option selected>0</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                  </select>
+                  <input
+                    type="number"
+                    name="sgst"
+                    id="sgst"
+                    class="form-control"
+                    placeholder=""
+                    disabled
+                    required
                 />
               </div>
               <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">IGST</span>
-                <input
-                  type="number"
-                  name="igst"
-                  class="form-control"
-                  placeholder=""
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                <span class="input-group-text" id="basic-addon1">IGST%</span>
+                  <select class="form-select-sm" id="igstSelect" onchange="calcIgst()">
+                    <option selected>0</option>
+                    <option value="2">2</option>
+                    <option value="4">4</option>
+                    <option value="6">6</option>
+                  </select>
+                  <input
+                    type="number"
+                    name="igst"
+                    id="igst"
+                    class="form-control"
+                    placeholder=""
+                    disabled
+                    required
                 />
               </div>
               <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Total</span>
-                <input
-                  type="number"
-                  name="total"
-                  class="form-control"
-                  placeholder=""
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
+                <span class="input-group-text" id="basic-addon1">Total (In Rs.)</span>
+                  <input
+                    type="number"
+                    name="nettotal"
+                    id="nettotal"
+                    class="form-control"
+                    placeholder=""
+                    disabled
+                    required
                 />
               </div>
             </div>
@@ -254,12 +279,12 @@
           for((item) of data.items){
             const markup = `<tr>
                 <th scope="row">${rowCount}</th>
-                <td><input name="productName" type="text" class="form-control"  value="${item.productName}" /></td>
-                <td><input name="description" type="text" class="form-control text-end" value="${item.description}" /></td>
-                <td><input name="hsncode" type="number" class="form-control text-end" value="${item.hsncode}" /></td>
-                <td><input name="qty" type="number" class="form-control text-end" value="${item.quantity}" /></td>
-                <td><input name="rate" type="number" class="form-control text-end" value="${item.price}" /></td>
-                <td><input name="total" type="number" class="form-control text-end" value="${item.total}" /></td>
+                <td><input name="productName" type="text" class="form-control" required value="${item.productName}" /></td>
+                <td><input name="description" type="text" class="form-control required text-end" value="${item.description}" /></td>
+                <td><input name="hsncode" type="number" class="form-control text-end" required value="${item.hsncode}" /></td>
+                <td><input name="qty" type="number" class="form-control text-end" required value="${item.quantity}" /></td>
+                <td><input name="rate" type="number" class="form-control text-end" required value="${item.price}" /></td>
+                <td><input name="total" type="number" class="form-control text-end" disabled value="${item.total}" /></td>
                 <td><i class="fa-solid fa-trash"></i></td>
               </tr>`
               document
