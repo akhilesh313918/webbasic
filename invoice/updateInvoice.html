@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Invoice Manager</title>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -17,165 +17,218 @@
     <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <div class="container">
-      <ul class="nav">
-        <li class="nav-item">
-          <a class="nav-link active" href="index.html">Home</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link active" href="invoicelist.html">Invoice List</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="customers.html">Customers</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="products.html">Products</a>
-        </li>
-      </ul>
-      <form action="" id="upDateInvoiceForm"></form>
-    </div>
-    <script>
-      console.log("invoiceId - " + sessionStorage.getItem("invoiceId"));
-      let id = sessionStorage.getItem("invoiceId");
-      console.log("http://localhost:3000/invoices/" + id);
-      fetch("http://localhost:3000/invoices/" + id)
-        .then((res) => {
-          console.log(res.json);
-          return res.json();
-        })
-        .then((data) => {
-          console.log(data);
-          console.log("date -> " + data.date);
-          const markup = `
-      <div class="card">
-        <div class="card-header text-center">
-          <h4>MODIFY INVOICE</h4>
-        </div>
-        <div class="card-body">
-          <div class="row">
-            <div class="col-8">
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Customer</span>
-                <input
-                  type="text"
-                  id="customerName";
+      <div class="container">
+        <ul class="nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="index.html">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link active" href="invoicelist.html">Invoice List</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="customers.html">Customers</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="products.html">Products</a>
+          </li>
+        </ul>
+        <form action="" id="upDateInvoiceForm">
+        <div class="card">
+          <div class="card-header text-center">
+            <h4>MODIFY INVOICE</h4>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-8">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"
+                    >Customer</span
+                  >
+                  <input
+                    type="text"
+                    id="customerName";
                     name="customerName"
                     class="form-control"
                     placeholder="Customer"
                     onclick="loadCustomer()"
                     required
-                  value="${data.customerName}"
-                />
-              </div>
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Address & Phone</span>
-                <input
-                  type="text"
-                  id="Address&Phone"
+                  />
+                </div>
+                <div id="customerList" className="customerList">
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"
+                    >Address & Phone</span
+                  >
+                  <input
+                    type="text"
+                    id="Address&Phone"
                     name="Address&Phone"
                     class="form-control"
                     placeholder="Address & Phone"
                     aria-label="Customer"
                     aria-describedby="basic-addon1"
                     required
-                  value="${data.addressAndPhone}"
-                />
-              </div>
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">GST</span>
-                <input
-                  type="text"
-                  id="gstNum"
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">GST</span>
+                  <input
+                    type="text"
+                    id="gstNum"
                     name="gstNum"
                     class="form-control"
                     placeholder="GST No."
                     aria-label="Customer"
                     aria-describedby="basic-addon1"
                     required
-                  value="${data.gstNum}"
-                />
+                  />
+                </div>
               </div>
-            </div>
-            <div class="col-4">
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Inv. No.</span>
-                <input
-                  type="text"
-                  name="invoiceNum"
+              <div class="col-4">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"
+                    >Inv. No.</span
+                  >
+                  <input
+                    type="text"
+                    name="invoiceNum"
                     id="invoiceNum"
                     class="form-control"
                     placeholder="Inv. No."
                     disabled
-                  value="${data.id}"
-                />
-              </div>
+                  />
+                </div>
 
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Date</span>
-                <input
-                  type="date"
-                  name="date"
-                  class="form-control"
-                  placeholder="Date"
-                  aria-label="Customer"
-                  aria-describedby="basic-addon1"
-                  value="${data.date}"
-                />
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Date</span>
+                  <input
+                    type="date"
+                    name="date"
+                    class="form-control"
+                    placeholder="Date"
+                    aria-label="Customer"
+                    aria-describedby="basic-addon1"
+                    required
+                  />
+                </div>
+                <!-- <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                  <button type="button" class="btn btn-primary addRow" onclick="onAdd()">Add Row</button>
+                </div> -->
               </div>
             </div>
-          </div>
 
-          <table class="table table-bordered">
-            <thead class="table-dark">
-              <tr>
-                <th scope="col">#</th>
-                <th scope="col">Particular</th>
-                <th scope="col">description</th>
-                <th scope="col">HSN code</th>
-                <th scope="col" class="text-end">Qty</th>
-                <th scope="col" class="text-end">Rate</th>
-                <th scope="col" class="text-end">Total</th>
-                <th scope="col"><i class="fa-solid fa-plus" onclick="onAdd()"></i></th>
-              </tr>
-            </thead>
-            <tbody>
-            </tbody>
-          </table>
-
-          <div class="row">
-            <div class="col-8">
-              <div class="card">
-                <div class="card-body">
-                  <h5 class="card-title">Note:</h5>
-                  <p class="card-text">
-                    Goods once sold will not be taken back. Applicable to
-                    Jabalpur juridisction.
-                  </p>
-                  <h5 class="card-title">Bank Details:</h5>
-                  <p class="card-text">Cmos Electronics</p>
-                  <p class="card-text">ICICI bank A/C : 019805501094</p>
-                  <p class="card-text">IFSC : ICIC0000198</p>
-                  <p class="card-text">Branch : Napier Town, Jabalpur</p>
+            <table class="table table-bordered items">
+              <thead class="table-dark">
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Particular</th>
+                  <th scope="col">description</th>
+                  <th scope="col">HSN code</th>
+                  <th scope="col" class="text-end">Qty</th>
+                  <th scope="col" class="text-end">Rate (In Rs.)</th>
+                  <th scope="col" class="text-end">Total</th>
+                  <th scope="col"><i class="fa-solid fa-plus" onclick="onAdd()"></i></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">1</th>
+                  <td>
+                    <input
+                      name="productName"
+                      id="productName"
+                      type="text"
+                      class="form-control"
+                      oninput="filterProducts(this)"
+                      onclick="loadProductsList(this);"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      name="description"
+                      type="text"
+                      class="form-control text-end"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      name="hsncode"
+                      type="number"
+                      class="form-control text-end"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      name="qty"
+                      type="number"
+                      class="form-control text-end"
+                      onchange="calc(this);"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      name="rate"
+                      type="number"
+                      class="form-control text-end"
+                      onchange="calc(this);"
+                      required
+                    />
+                  </td>
+                  <td>
+                    <input
+                      name="total"
+                      type="number"
+                      class="form-control text-end"
+                      disabled
+                    />
+                  </td>
+                  <td>
+                    <i class="fa-solid fa-trash"></i>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <div id="productList" className="productList">
+            </div>
+            <div class="row">
+              <div class="col-8">
+                <div class="card">
+                  <div class="card-body">
+                    <h5 class="card-title">Note:</h5>
+                    <p class="card-text">
+                      Goods once sold will not be taken back. Applicable to
+                      Jabalpur juridisction.
+                    </p>
+                    <h5 class="card-title">Bank Details:</h5>
+                    <p class="card-text">Cmos Electronics</p>
+                    <p class="card-text">ICICI bank A/C : 019805501094</p>
+                    <p class="card-text">IFSC : ICIC0000198</p>
+                    <p class="card-text">Branch : Napier Town, Jabalpur</p>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div class="col-4">
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1"
-                  >Sub Total</span
-                >
-                <input
-                type="number"
+              <div class="col-4">
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1"
+                    >Sub Total</span
+                  >
+                  <input
+                    type="number"
                     name="subtotal"
                     id="subtotal"
                     class="form-control"
                     placeholder=""
                     disabled
                     required
-                />
-              </div>
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">CGST%</span>
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">CGST%</span>
                   <select class="form-select-sm" id="cgstSelect" onchange="calcCgst()">
                     <option selected>0</option>
                     <option value="2">2</option>
@@ -190,10 +243,10 @@
                     placeholder=""
                     disabled
                     required
-                />
-              </div>
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">SGST%</span>
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">SGST%</span>
                   <select class="form-select-sm" id="sgstSelect" onchange="calcSgst()">
                     <option selected>0</option>
                     <option value="2">2</option>
@@ -208,10 +261,10 @@
                     placeholder=""
                     disabled
                     required
-                />
-              </div>
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">IGST%</span>
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">IGST%</span>
                   <select class="form-select-sm" id="igstSelect" onchange="calcIgst()">
                     <option selected>0</option>
                     <option value="2">2</option>
@@ -226,10 +279,10 @@
                     placeholder=""
                     disabled
                     required
-                />
-              </div>
-              <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Total (In Rs.)</span>
+                  />
+                </div>
+                <div class="input-group mb-3">
+                  <span class="input-group-text" id="basic-addon1">Total (In Rs.)</span>
                   <input
                     type="number"
                     name="nettotal"
@@ -238,63 +291,27 @@
                     placeholder=""
                     disabled
                     required
-                />
+                  />
+                </div>
               </div>
             </div>
           </div>
         </div>
+        <div class="row">
+          <div class="col-6 d-grid gap-2 d-md-flex justify-content-md-end">
+            <button type="button" class="btn btn-primary m-2">Preview</button>
+          </div>
+          <div class="col-6">
+            <button type="submit" class="btn btn-warning m-2">Modify</button>
+          </div>
+        </div>
       </div>
-      <div class="row">
-        <div class="col-6 d-grid gap-2 d-md-flex justify-content-md-end">
-          <button type="button" class="btn btn-primary m-2">Preview</button>
-        </div>
-        <div class="col-6">
-          <button type="submit" class="btn btn-warning m-2">Modify</button>
-        </div>
-      </div>`;
-          document
-            .querySelector("form")
-            .insertAdjacentHTML("beforeend", markup);
-        });
-
-      function onEdit(id) {
-        console.log(id);
-        sessionStorage.setItem("invoiceId", id);
-        window.location.replace("updateInvoice.html");
-      }
-
-      function onDelete(id) {
-        console.log(id);
-      }
-
-      function createitemRows(){
-        fetch("http://localhost:3000/invoices/" + id)
-        .then((res) => {
-          console.log(res.json);
-          return res.json();
-        })
-        .then((data) => {
-          console.log("item arr lengths is "+data.items.length);
-          let rowCount = 1;
-          for((item) of data.items){
-            const markup = `<tr>
-                <th scope="row">${rowCount}</th>
-                <td><input name="productName" type="text" class="form-control" required value="${item.productName}" /></td>
-                <td><input name="description" type="text" class="form-control required text-end" value="${item.description}" /></td>
-                <td><input name="hsncode" type="number" class="form-control text-end" required value="${item.hsncode}" /></td>
-                <td><input name="qty" type="number" class="form-control text-end" required value="${item.quantity}" /></td>
-                <td><input name="rate" type="number" class="form-control text-end" onchange="calc(this);" required value="${item.price}" /></td>
-                <td><input name="total" type="number" class="form-control text-end" onchange="calc(this);" disabled value="${item.total}" /></td>
-                <td><i class="fa-solid fa-trash" onclick="onDelete(this);"></i></td>
-              </tr>`
-              document
-            .querySelector("tbody")
-            .insertAdjacentHTML("beforeend", markup);
-            rowCount++;
-          }
-        })}
-        createitemRows();
-    </script>
-    <script src="updateInvoiceScript.js"></script>
+    </form>
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+      crossorigin="anonymous"
+    ></script>
+    <script src="script.js"></script>
   </body>
 </html>

@@ -335,7 +335,6 @@ function populateAddressGst(customerName) {
 
 function loadProductsList(pEvent) {
   productList.innerHTML = " ";
-  console.log("1. pEvent - " + pEvent);
   productList.style.display = "block";
   fetch("http://localhost:3000/products")
     .then((response) => response.json())
@@ -345,7 +344,6 @@ function loadProductsList(pEvent) {
     });
 
   function showProducts(products, pEvent) {
-    console.log("2. pEvent - " + pEvent);
     const ul = document.createElement("ul");
     ul.innerHTML = " ";
     ul.className = "list-group";
@@ -369,9 +367,7 @@ function filterProducts(e) {
   for (let li of liElements) {
     const currentProductName = li.innerText.toLowerCase();
     const searchedProductName = e.value.toLocaleLowerCase();
-    console.log("inside filter prod");
     if (!currentProductName.includes(searchedProductName)){
-    console.log("coming inside If cond.");
       li.setAttribute("hidden", true);
     }
     else li.removeAttribute("hidden");
@@ -379,9 +375,20 @@ function filterProducts(e) {
 }
 
 function selectProduct(pEvent, e) {
-  console.log("3. pEvent - " + pEvent);
-  alert(e.innerText);
   pEvent.value = e.innerText;
   productList.style.display = "none";
-  //populateAddressGst(customerName.value);
+  populateHsnCode(productName.value);
+}
+
+function populateHsnCode(productName){
+  fetch("http://localhost:3000/products")
+    .then((response) => response.json())
+    .then((products) => setHsncode(productName, products));
+
+  function setHsncode(productName, products) {
+    for (let product of products) {
+      if (product.name === productName) {
+      }
+    }
+  }
 }
