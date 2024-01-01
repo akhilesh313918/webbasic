@@ -6,15 +6,17 @@ let customerName = document.getElementById("customerName");
 let AddressNPhone = document.getElementById("Address&Phone");
 let gstNum = document.getElementById("gstNum");
 let invoiceNum = document.getElementById("invoiceNum");
+let productList = document.getElementById("productList");
+let productName = document.getElementById("productName");
 let rowIndex;
 
-function getLatestInvoiceId(){
-fetch("http://localhost:3000/invoiceid")
-.then((response) => response.json())
-.then((data) => {
-	let latestInvoiceNum = data[0].id;
-	invoiceNum.value = latestInvoiceNum;
-})
+function getLatestInvoiceId() {
+  fetch("http://localhost:3000/invoiceid")
+    .then((response) => response.json())
+    .then((data) => {
+      let latestInvoiceNum = data[0].id;
+      invoiceNum.value = latestInvoiceNum;
+    });
 }
 getLatestInvoiceId();
 
@@ -27,6 +29,7 @@ invoiceForm.addEventListener("submit", (e) => {
   // }
 
   invoice.id = formData.get("invoiceNum");
+
   invoice.customerName = formData.get("customerName");
   invoice.addressAndPhone = formData.get("Address&Phone");
   invoice.gstNum = formData.get("gstNum");
@@ -140,8 +143,12 @@ function onAdd() {
 	<td>
 	  <input
 		name="productName"
-		type="text"
-		class="form-control"
+                      id="productName"
+                      type="text"
+                      class="form-control"
+                      oninput="filterProducts(this);"
+                      onclick="loadProductsList(this);"
+                      required
 	  />
 	</td>
 	<td>
@@ -164,6 +171,7 @@ function onAdd() {
 		type="number"
 		class="form-control text-end"
 		onchange="calc(this);"
+    required
 	  />
 	</td>
 	<td>
@@ -172,6 +180,7 @@ function onAdd() {
 		type="number"
 		class="form-control text-end"
 		onchange="calc(this);"
+    required
 	  />
 	</td>
 	<td>
@@ -180,6 +189,7 @@ function onAdd() {
 		type="number"
 		class="form-control text-end"
 		disabled
+    required
 	  />
 	</td>
 	<td>
@@ -267,7 +277,7 @@ function calcNetTotal() {
 }
 
 function loadCustomer() {
-	customerList.style.display = "block";	
+  customerList.style.display = "block";
   fetch("http://localhost:3000/customers")
     .then((response) => response.json())
     .then((customers) => showCustomers(customers));
@@ -279,7 +289,9 @@ function loadCustomer() {
       const li = document.createElement("li");
       li.className = "list-group-item";
       li.innerText = customer.customerName;
-	  li.onclick = function() { selectCustomer(this); };
+      li.onclick = function () {
+        selectCustomer(this);
+      };
       ul.appendChild(li);
       customerList.appendChild(ul);
     }
@@ -298,24 +310,76 @@ function filterUsers() {
   }
 }
 
-function selectCustomer(e){
-	//alert(e.innerText)
-	customerName.value = e.innerText;
-	customerList.style.display = "none";
-	populateAddressGst(customerName.value);
+function selectCustomer(e) {
+  //alert(e.innerText)
+  customerName.value = e.innerText;
+  customerList.style.display = "none";
+  populateAddressGst(customerName.value);
 }
 
-function populateAddressGst(customerName){
-	fetch("http://localhost:3000/customers")
+function populateAddressGst(customerName) {
+  fetch("http://localhost:3000/customers")
     .then((response) => response.json())
-    .then((customers) => setCustomerAddAndGst(customerName,customers));
+    .then((customers) => setCustomerAddAndGst(customerName, customers));
 
-	function setCustomerAddAndGst(customerName, customers){
-		for(let customer of customers){
-			if (customer.customerName === customerName){
-				AddressNPhone.value = customer.addressAndPhone;
-				gstNum.value = customer.gst;
-			}
-		}
-	}
+  function setCustomerAddAndGst(customerName, customers) {
+    for (let customer of customers) {
+      if (customer.customerName === customerName) {
+        AddressNPhone.value = customer.addressAndPhone;
+        gstNum.value = customer.gst;
+      }
+    }
+  }
+}
+
+function loadProductsList(pEvent) {
+  console.log("1. pEvent - " + pEvent);
+  productList.style.display = "block";
+  fetch("http://localhost:3000/products")
+    .then((response) => response.json())
+    .then((products) => {
+      console.log(products);
+      showProducts(products, pEvent);
+    });
+
+  function showProducts(products, pEvent) {
+    console.log("2. pEvent - " + pEvent);
+    const ul = document.createElement("ul");
+    ul.innerText = " ";
+    ul.className = "list-group";
+    for (let product of products) {
+      const li = document.createElement("li");
+      li.className = "list-group-item";
+      li.id = "productList";
+      li.innerText = product.name;
+      li.onclick = function () {
+        selectProduct(pEvent, this);
+      };
+      ul.appendChild(li);
+      productList.appendChild(ul);
+    }
+  }
+}
+
+//productName.oninput = filterProducts;
+function filterProducts(e) {
+  const liElements = document.getElementsByClassName("list-group-item");
+  for (let li of liElements) {
+    const currentProductName = li.innerText.toLowerCase();
+    const searchedProductName = e.value.toLocaleLowerCase();
+    console.log("inside filter prod");
+    if (!currentProductName.includes(searchedProductName)){
+    console.log("coming inside If cond.");
+      li.setAttribute("hidden", true);
+    }
+    else li.removeAttribute("hidden");
+  }
+}
+
+function selectProduct(pEvent, e) {
+  console.log("3. pEvent - " + pEvent);
+  alert(e.innerText);
+  pEvent.value = e.innerText;
+  productList.style.display = "none";
+  //populateAddressGst(customerName.value);
 }

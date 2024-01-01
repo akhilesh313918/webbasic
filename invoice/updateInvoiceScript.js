@@ -1,10 +1,17 @@
 let invoiceForm = document.getElementById("upDateInvoiceForm");
 let tbody = document.querySelector("tbody");
 let table = document.querySelector("table");
+let customerList = document.getElementById("customerList");
+let customerName = document.getElementById("customerName");
+let AddressNPhone = document.getElementById("Address&Phone");
+let gstNum = document.getElementById("gstNum");
+let invoiceNum = document.getElementById("invoiceNum");
+let rowIndex;
+
+
 invoiceForm.addEventListener('submit', (e) => {
 	e.preventDefault();
 	
-
 	const formData = new FormData(invoiceForm);
 	// for(item of formData){
 	// 	console.log(item);
@@ -96,6 +103,7 @@ function onAdd(){
 		name="productName"
 		type="text"
 		class="form-control"
+		required
 	  />
 	</td>
 	<td>
@@ -103,6 +111,7 @@ function onAdd(){
 		name="description"
 		type="text"
 		class="form-control text-end"
+		required
 	  />
 	</td>
 	<td>
@@ -110,6 +119,7 @@ function onAdd(){
 		name="hsncode"
 		type="number"
 		class="form-control text-end"
+		required
 	  />
 	</td>
 	<td>
@@ -117,6 +127,8 @@ function onAdd(){
 		name="qty"
 		type="number"
 		class="form-control text-end"
+		onchange="calc(this);"
+        required
 	  />
 	</td>
 	<td>
@@ -124,6 +136,8 @@ function onAdd(){
 		name="rate"
 		type="number"
 		class="form-control text-end"
+		onchange="calc(this);"
+        required
 	  />
 	</td>
 	<td>
@@ -131,23 +145,148 @@ function onAdd(){
 		name="total"
 		type="number"
 		class="form-control text-end"
+		disabled
 	  />
 	</td>
 	<td>
 	  <i class="fa-solid fa-trash"></i>
 	</td>
   </tr>`;
-  tbody.insertAdjacentHTML('beforeend',markup)
+  tbody = document.querySelector("tbody");
+  tbody.insertAdjacentHTML('beforeend',markup);
 }
 	
 function onDelete(e){
-	if(!e.target.classList.contains("fa-trash")){
-		console.log("inside if");
-		return;
-	}
-	const btn = e.target;
+	console.log(">>>>>>>>>>>>>>>> Inside on delete");
+	console.log(e);
+	// if(!e.target.classList.contains("fa-trash")){
+	// 	console.log("inside if");
+	// 	return;
+	// }
+	const btn = e;
 	btn.closest("tr").remove();
-
+	calc(this);
 }
 
-table.addEventListener("click", onDelete)
+// table = document.querySelector("table");
+// table.addEventListener("click", onDelete(this))
+
+function calc(e) {
+	let index = e.parentElement.parentElement.rowIndex - 1;
+	console.log(e.parentElement.parentElement.rowIndex);
+	let qty = document.getElementsByName("qty")[index].value;
+	let price = document.getElementsByName("rate")[index].value;
+	let total = qty * price;
+	document.getElementsByName("total")[index].value = total;
+	calcSubTotal();
+  }
+
+function calcSubTotal() {
+	let sum = 0;
+	let totals = document.getElementsByName("total");
+	console.log(totals);
+	for (let i = 0; i < totals.length; i++) {
+	  sum = +sum + +totals[i].value;
+	}
+	console.log("sum - " + sum);
+	document.getElementById("subtotal").value = sum.toFixed(2);
+	calcCgst();
+	calcSgst();
+	calcIgst();
+	calcNetTotal();
+  }
+  
+  function calcCgst() {
+	//console.log("calcCgst "+e.value);
+	let subtotal = document.getElementById("subtotal").value;
+	let cgstSelect = document.getElementById("cgstSelect").value;
+	document.getElementById("cgst").value = (
+	  subtotal *
+	  (cgstSelect * 0.01)
+	).toFixed(2);
+	calcNetTotal();
+  }
+  
+  function calcSgst() {
+	let subtotal = document.getElementById("subtotal").value;
+	let sgstSelect = document.getElementById("sgstSelect").value;
+	document.getElementById("sgst").value = (
+	  subtotal *
+	  (sgstSelect * 0.01)
+	).toFixed(2);
+	calcNetTotal();
+  }
+  
+  function calcIgst(e) {
+	let subtotal = document.getElementById("subtotal").value;
+	let igstSelect = document.getElementById("igstSelect").value;
+	document.getElementById("igst").value = (
+	  subtotal *
+	  (igstSelect * 0.01)
+	).toFixed(2);
+	calcNetTotal();
+  }
+  
+  function calcNetTotal() {
+	let subtotal = document.getElementById("subtotal").value;
+	let cgst = document.getElementById("cgst").value;
+	let sgst = document.getElementById("sgst").value;
+	let igst = document.getElementById("igst").value;
+	document.getElementById("nettotal").value = Math.floor(
+	  +subtotal + +cgst + +sgst + +igst
+	);
+  }
+  
+  function loadCustomer() {
+	  customerList.style.display = "block";	
+	fetch("http://localhost:3000/customers")
+	  .then((response) => response.json())
+	  .then((customers) => showCustomers(customers));
+  
+	function showCustomers(customers) {
+	  const ul = document.createElement("ul");
+	  ul.className = "list-group";
+	  for (let customer of customers) {
+		const li = document.createElement("li");
+		li.className = "list-group-item";
+		li.innerText = customer.customerName;
+		li.onclick = function() { selectCustomer(this); };
+		ul.appendChild(li);
+		customerList.appendChild(ul);
+	  }
+	}
+  }
+  
+  customerName.oninput = filterUsers;
+  function filterUsers() {
+	const liElements = document.getElementsByClassName("list-group-item");
+	for (let li of liElements) {
+	  const currentCustName = li.innerText.toLowerCase();
+	  const searchedCustName = customerName.value.toLocaleLowerCase();
+	  if (!currentCustName.includes(searchedCustName))
+		li.setAttribute("hidden", true);
+	  else li.removeAttribute("hidden");
+	}
+  }
+  
+  function selectCustomer(e){
+	  //alert(e.innerText)
+	  customerName.value = e.innerText;
+	  customerList.style.display = "none";
+	  populateAddressGst(customerName.value);
+  }
+  
+  function populateAddressGst(customerName){
+	  fetch("http://localhost:3000/customers")
+	  .then((response) => response.json())
+	  .then((customers) => setCustomerAddAndGst(customerName,customers));
+  
+	  function setCustomerAddAndGst(customerName, customers){
+		  for(let customer of customers){
+			  if (customer.customerName === customerName){
+				  AddressNPhone.value = customer.addressAndPhone;
+				  gstNum.value = customer.gst;
+			  }
+		  }
+	  }
+  }

@@ -283,16 +283,15 @@
                 <td><input name="description" type="text" class="form-control required text-end" value="${item.description}" /></td>
                 <td><input name="hsncode" type="number" class="form-control text-end" required value="${item.hsncode}" /></td>
                 <td><input name="qty" type="number" class="form-control text-end" required value="${item.quantity}" /></td>
-                <td><input name="rate" type="number" class="form-control text-end" required value="${item.price}" /></td>
-                <td><input name="total" type="number" class="form-control text-end" disabled value="${item.total}" /></td>
-                <td><i class="fa-solid fa-trash"></i></td>
+                <td><input name="rate" type="number" class="form-control text-end" onchange="calc(this);" required value="${item.price}" /></td>
+                <td><input name="total" type="number" class="form-control text-end" onchange="calc(this);" disabled value="${item.total}" /></td>
+                <td><i class="fa-solid fa-trash" onclick="onDelete(this);"></i></td>
               </tr>`
               document
             .querySelector("tbody")
             .insertAdjacentHTML("beforeend", markup);
             rowCount++;
           }
-          
         })}
         createitemRows();
     </script>

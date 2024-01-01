@@ -137,8 +137,11 @@
                   <td>
                     <input
                       name="productName"
+                      id="productName"
                       type="text"
                       class="form-control"
+                      oninput="filterProducts(this)"
+                      onclick="loadProductsList(this);"
                       required
                     />
                   </td>
@@ -190,7 +193,8 @@
                 </tr>
               </tbody>
             </table>
-
+            <div id="productList" className="productList">
+            </div>
             <div class="row">
               <div class="col-8">
                 <div class="card">
