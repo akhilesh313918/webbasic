@@ -277,6 +277,7 @@ function calcNetTotal() {
 }
 
 function loadCustomer() {
+  customerList.innerHTML = " ";
   customerList.style.display = "block";
   fetch("http://localhost:3000/customers")
     .then((response) => response.json())
@@ -333,6 +334,7 @@ function populateAddressGst(customerName) {
 }
 
 function loadProductsList(pEvent) {
+  productList.innerHTML = " ";
   console.log("1. pEvent - " + pEvent);
   productList.style.display = "block";
   fetch("http://localhost:3000/products")
@@ -345,7 +347,7 @@ function loadProductsList(pEvent) {
   function showProducts(products, pEvent) {
     console.log("2. pEvent - " + pEvent);
     const ul = document.createElement("ul");
-    ul.innerText = " ";
+    ul.innerHTML = " ";
     ul.className = "list-group";
     for (let product of products) {
       const li = document.createElement("li");
