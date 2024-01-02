@@ -15,7 +15,7 @@ function getLatestInvoiceId() {
     .then((response) => response.json())
     .then((data) => {
       let latestInvoiceNum = data[0].id;
-      invoiceNum.value = latestInvoiceNum;
+      invoiceNum.value = +(latestInvoiceNum);
     });
 }
 getLatestInvoiceId();
@@ -28,7 +28,7 @@ invoiceForm.addEventListener("submit", (e) => {
   // 	console.log(item);
   // }
 
-  invoice.id = formData.get("invoiceNum");
+  invoice.id = +(formData.get("invoiceNum"));
 
   invoice.customerName = formData.get("customerName");
   invoice.addressAndPhone = formData.get("Address&Phone");

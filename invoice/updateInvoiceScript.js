@@ -1,13 +1,53 @@
 let invoiceForm = document.getElementById("upDateInvoiceForm");
+let invoiceNum = document.getElementById("invoiceNum");
+let customerName = document.getElementById("customerName");
+let addressNPhone = document.getElementById("Address&Phone");
+let gstNum = document.getElementById("gstNum");
+let date = document.getElementById("date");
 let tbody = document.querySelector("tbody");
 let table = document.querySelector("table");
 let customerList = document.getElementById("customerList");
-let customerName = document.getElementById("customerName");
-let AddressNPhone = document.getElementById("Address&Phone");
-let gstNum = document.getElementById("gstNum");
-let invoiceNum = document.getElementById("invoiceNum");
 let rowIndex;
+let rowCount = 1;
 
+function onPageLoad(){
+	console.log("invoiceId - " + sessionStorage.getItem("invoiceId"));
+      let id = sessionStorage.getItem("invoiceId");
+      console.log("http://localhost:3000/invoices/" + id);
+      fetch("http://localhost:3000/invoices/" + id)
+        .then((res) => {
+          console.log(res.json);
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+		  invoiceNum.value = data.id;
+		  customerName.value = data.customerName;
+		  addressNPhone.value = data.addressAndPhone;
+		  date.value = data.date;
+		  gstNum.value = data.gstNum;	
+
+		  console.log("item arr lengths is "+data.items.length);
+          //let rowCount = 1;
+          for((item) of data.items){
+            const markup = `<tr>
+                <th scope="row">${rowCount}</th>
+                <td><input name="productName" type="text" class="form-control"  value="${item.productName}" /></td>
+                <td><input name="description" type="text" class="form-control text-end" value="${item.description}" /></td>
+                <td><input name="hsncode" type="number" class="form-control text-end" value="${item.hsncode}" /></td>
+                <td><input name="qty" type="number" class="form-control text-end" value="${item.quantity}" /></td>
+                <td><input name="rate" type="number" class="form-control text-end" value="${item.price}" /></td>
+                <td><input name="total" type="number" class="form-control text-end" value="${item.total}" /></td>
+                <td><i class="fa-solid fa-trash" onclick="onDelete(this);"></i></td>
+              </tr>`
+              document
+            .querySelector("tbody")
+            .insertAdjacentHTML("beforeend", markup);
+            rowCount++;	
+		  }
+		})
+}
+onPageLoad();
 
 invoiceForm.addEventListener('submit', (e) => {
 	e.preventDefault();
@@ -97,7 +137,7 @@ const createUser = async(invoice, id)=> {
 
 function onAdd(){
 	let markup = `<tr>
-	<th scope="row">1</th>
+	<th scope="row">${rowCount}</th>
 	<td>
 	  <input
 		name="productName"
@@ -149,27 +189,27 @@ function onAdd(){
 	  />
 	</td>
 	<td>
-	  <i class="fa-solid fa-trash"></i>
+	  <i class="fa-solid fa-trash" onclick="onDelete(this);"></i>
 	</td>
   </tr>`;
   tbody = document.querySelector("tbody");
   tbody.insertAdjacentHTML('beforeend',markup);
 }
 	
-function onDelete(e){
-	console.log(">>>>>>>>>>>>>>>> Inside on delete");
+function onDelete(e) {
 	console.log(e);
-	// if(!e.target.classList.contains("fa-trash")){
-	// 	console.log("inside if");
-	// 	return;
+	// if (!e.target.classList.contains("fa-trash")) {
+	//   console.log("inside if");
+	//   return;
 	// }
 	const btn = e;
 	btn.closest("tr").remove();
-	calc(this);
-}
+  }
+  
+//table.addEventListener("click", onDelete);
 
 // table = document.querySelector("table");
-// table.addEventListener("click", onDelete(this))
+//table.addEventListener("click", onDelete())
 
 function calc(e) {
 	let index = e.parentElement.parentElement.rowIndex - 1;
@@ -238,7 +278,8 @@ function calcSubTotal() {
   }
   
   function loadCustomer() {
-	  customerList.style.display = "block";	
+	customerList.innerHTML = "";
+	customerList.style.display = "block";	
 	fetch("http://localhost:3000/customers")
 	  .then((response) => response.json())
 	  .then((customers) => showCustomers(customers));
