@@ -37,7 +37,7 @@ function onPageLoad(){
                 <td><input name="hsncode" type="number" class="form-control text-end" value="${item.hsncode}" /></td>
                 <td><input name="qty" type="number" class="form-control text-end" value="${item.quantity}" /></td>
                 <td><input name="rate" type="number" class="form-control text-end" value="${item.price}" /></td>
-                <td><input name="total" type="number" class="form-control text-end" value="${item.total}" /></td>
+                <td><input name="total" type="number" class="form-control text-end" required disabled value="${item.total}" /></td>
                 <td><i class="fa-solid fa-trash" onclick="onDelete(this);"></i></td>
               </tr>`
               document
@@ -204,6 +204,7 @@ function onDelete(e) {
 	// }
 	const btn = e;
 	btn.closest("tr").remove();
+	rowCount--;
   }
   
 //table.addEventListener("click", onDelete);
