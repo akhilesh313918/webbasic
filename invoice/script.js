@@ -11,6 +11,29 @@ let productName = document.getElementById("productName");
 let rowIndex;
 let rowCount = 1;
 
+let invoice = {
+  id: Number,
+  customerName: String,
+  addressAndPhone: String,
+  gstNum: String,
+  date: String,
+  subtotal : Number,
+  cgst : Number,
+  sgst : Number,
+  igst : Number,
+  netotal : Number,
+  items: []
+};
+
+let item = {
+  productName: String,
+  description: String,
+  hsncode: String,
+  quantity: Number,
+  price: Number,
+  total: Number,
+};
+
 function getLatestInvoiceId() {
   fetch("http://localhost:3000/invoiceid")
     .then((response) => response.json())
@@ -38,11 +61,18 @@ invoiceForm.addEventListener('submit', e => {
   invoice.addressAndPhone = formData.get("Address&Phone");
   invoice.gstNum = formData.get("gstNum");
   invoice.date = formData.get("date").toString();
+  console.log("subtotal  >>>>>>> "+ document.getElementById("subtotal").value);
+  invoice.subtotal = document.getElementById("subtotal").value;
+  invoice.cgst = document.getElementById("cgst").value;
+  invoice.sgst = document.getElementById("sgst").value;
+  invoice.igst = document.getElementById("igst").value;
+  invoice.netotal = document.getElementById("nettotal").value;
 
   let rowLegnth = table.rows.length;
   console.log("Table length is " + rowLegnth);
   for (let i = 1; i < rowLegnth; i++) {
     //gets cells of current row
+    item = {};
     let oCells = table.rows.item(i).cells;
     console.log("Total num of cells -> " + oCells.length);
 
@@ -95,6 +125,7 @@ invoiceForm.addEventListener('submit', e => {
     // item.price = formData.get("rate");
     // item.total = formData.get("total");
     invoice.items.push(item);
+    item = {};
   }
 
   // invoice.items.push(item);
@@ -103,27 +134,9 @@ invoiceForm.addEventListener('submit', e => {
   createUser(invoice);
   console.log(e);
   alert(e);
-  e.preventDefault();
+  // e.preventDefault();
 });
 }
-
-var invoice = {
-  id: Number,
-  customerName: String,
-  addressAndPhone: String,
-  gstNum: String,
-  date: String,
-  items: [],
-};
-
-var item = {
-  productName: String,
-  description: String,
-  hsncode: String,
-  quantity: Number,
-  price: Number,
-  total: Number,
-};
 
 const createUser = async (invoice) => {
   let bodydata = invoice;

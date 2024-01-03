@@ -18,6 +18,11 @@ let invoice = {
 	addressAndPhone : String,
 	gstNum: String,
 	date: String,
+	subtotal : Number,
+  cgst : Number,
+  sgst : Number,
+  igst : Number,
+  netotal : Number,
 	items : []
 };
 
@@ -86,6 +91,11 @@ invoiceForm.addEventListener("submit", (e) => {
 	invoice.addressAndPhone = formData.get("Address&Phone");
 	invoice.gstNum = formData.get("gstNum");
 	invoice.date = formData.get("date").toString();
+	invoice.subtotal = document.getElementById("subtotal").value;
+  invoice.cgst = document.getElementById("cgst").value;
+  invoice.sgst = document.getElementById("sgst").value;
+  invoice.igst = document.getElementById("igst").value;
+  invoice.netotal = document.getElementById("nettotal").value;
   
 	let rowLegnth = table.rows.length;
 	console.log("Table length is " + rowLegnth);
@@ -132,6 +142,7 @@ invoiceForm.addEventListener("submit", (e) => {
   
 	console.log("invoice data -> " + JSON.stringify(invoice));
 	modify(invoice, invoice.id);
+	item = {};
   });
 }
 
