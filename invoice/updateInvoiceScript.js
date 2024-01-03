@@ -7,8 +7,28 @@ let date = document.getElementById("date");
 let tbody = document.querySelector("tbody");
 let table = document.querySelector("table");
 let customerList = document.getElementById("customerList");
+let productList = document.getElementById("productList");
+let productName = document.getElementById("productName");
 let rowIndex;
 let rowCount = 1;
+
+let invoice = {
+	id : Number,
+	customerName : String,
+	addressAndPhone : String,
+	gstNum: String,
+	date: String,
+	items : []
+};
+
+let item = {
+	productName : String,
+	description: String,
+	hsncode: String,
+	quantity: Number,
+	price: Number,
+	total: Number
+};
 
 function onPageLoad(){
 	console.log("invoiceId - " + sessionStorage.getItem("invoiceId"));
@@ -32,11 +52,12 @@ function onPageLoad(){
           for((item) of data.items){
             const markup = `<tr>
                 <th scope="row">${rowCount}</th>
-                <td><input name="productName" type="text" class="form-control"  value="${item.productName}" /></td>
+                <td><input name="productName" type="text" class="form-control" oninput="filterProducts(this)"
+				onclick="loadProductsList(this);"  value="${item.productName}" /></td>
                 <td><input name="description" type="text" class="form-control text-end" value="${item.description}" /></td>
                 <td><input name="hsncode" type="number" class="form-control text-end" value="${item.hsncode}" /></td>
-                <td><input name="qty" type="number" class="form-control text-end" value="${item.quantity}" /></td>
-                <td><input name="rate" type="number" class="form-control text-end" value="${item.price}" /></td>
+                <td><input name="qty" type="number" class="form-control text-end"  onchange="calc(this);" required value="${item.quantity}" /></td>
+                <td><input name="rate" type="number" class="form-control text-end" onchange="calc(this);" required value="${item.price}" /></td>
                 <td><input name="total" type="number" class="form-control text-end" required disabled value="${item.total}" /></td>
                 <td><i class="fa-solid fa-trash" onclick="onDelete(this);"></i></td>
               </tr>`
@@ -49,77 +70,76 @@ function onPageLoad(){
 }
 onPageLoad();
 
-invoiceForm.addEventListener('submit', (e) => {
+function update(){
+invoiceForm.addEventListener("submit", (e) => {	
+	console.log("inside modify");
 	e.preventDefault();
-	
+  
 	const formData = new FormData(invoiceForm);
 	// for(item of formData){
 	// 	console.log(item);
 	// }
-
-	invoice.id =  formData.get("invoiceNum");
-	invoice.customerName =  formData.get("customerName");
-	invoice.addressAndPhone =  formData.get("Address&Phone");
-	invoice.gstNum =  formData.get("gstNum");
-	invoice.date =  formData.get("date").toString();
-	
-
-	item.productName = formData.get("productName");
-	item.description = formData.get("description");
-	item.hsncode = formData.get("hsncode");
-	item.quantity = formData.get("qty");
-	item.price = formData.get("rate");
-	item.total = formData.get("total");
-
-	invoice.items.push(item);
-	
-	console.log("invoice data -> "+ JSON.stringify(invoice));
-	createUser(invoice, invoice.id);
-})
-
-function addRow() {
-	var table = document.getElementById("items");
-	var row = table.insertRow(2);
-	var cell1 = row.insertCell(0);
-	var cell2 = row.insertCell(1);
-	var cell3 = row.insertCell(2);
-	var cell4 = row.insertCell(3);
-	var cell5 = row.insertCell(4);
-	var cell6 = row.insertCell(5);
-	var cell7 = row.insertCell(6);
-	cell1.innerHTML = "<input type='text'>";
-	cell2.innerHTML = "<input type='text'>";
-	cell3.innerHTML = "<input type='text'>";
-	cell4.innerHTML = "<input type='text'>";
-	cell5.innerHTML = "<input type='text'>";
-	cell6.innerHTML = "<input type='text'>";
-	cell7.innerHTML = "<button onclick='delRow()'>-</button>";
-  }
+  
+	invoice.id = invoiceNum.value;;
+  
+	invoice.customerName = formData.get("customerName");
+	invoice.addressAndPhone = formData.get("Address&Phone");
+	invoice.gstNum = formData.get("gstNum");
+	invoice.date = formData.get("date").toString();
+  
+	let rowLegnth = table.rows.length;
+	console.log("Table length is " + rowLegnth);
+	for (let i = 1; i < rowLegnth; i++) {
+		
+	 let item = {};	
+	  //gets cells of current row
+	  let oCells = table.rows.item(i).cells;
+	  console.log("Total num of cells -> " + oCells.length);
+	  console.log("cells detail -> " + oCells.item(i).value);
+  
+	  console.log(
+		"cell data - " + oCells.item(1).getElementsByTagName("input")[0].value
+	  );
+	  item.productName = oCells.item(1).getElementsByTagName("input")[0].value;
+  
+	  console.log(
+		"cell data - " + oCells.item(2).getElementsByTagName("input")[0].value
+	  );
+	  item.description = oCells.item(2).getElementsByTagName("input")[0].value;
+  
+	  console.log(
+		"cell data - " + oCells.item(3).getElementsByTagName("input")[0].value
+	  );
+	  item.hsncode = oCells.item(3).getElementsByTagName("input")[0].value;
+  
+	  console.log(
+		"cell data - " + oCells.item(4).getElementsByTagName("input")[0].value
+	  );
+	  item.quantity = oCells.item(4).getElementsByTagName("input")[0].value;
+  
+	  console.log(
+		"cell data - " + oCells.item(5).getElementsByTagName("input")[0].value
+	  );
+	  item.price = oCells.item(5).getElementsByTagName("input")[0].value;
+  
+	  console.log(
+		"cell data - " + oCells.item(6).getElementsByTagName("input")[0].value
+	  );
+	  item.total = oCells.item(6).getElementsByTagName("input")[0].value;
+  
+	  invoice.items.push(item);
+	}
+  
+	console.log("invoice data -> " + JSON.stringify(invoice));
+	modify(invoice, invoice.id);
+  });
+}
 
   function delRow() {
 	var table = document.getElementById("items").deleteRow(1);
   }  
 
-var invoice = {
-	id : Number,
-	customerName : String,
-	addressAndPhone : String,
-	gstNum: String,
-	date: String,
-	items : []
-};
-
-var item = {
-	productName : String,
-	description: String,
-	hsncode: String,
-	quantity: Number,
-	price: Number,
-	total: Number
-};
-
-
-const createUser = async(invoice, id)=> {
+const modify = async(invoice, id)=> {
     let bodydata = invoice;
     
     const options = {
@@ -143,6 +163,8 @@ function onAdd(){
 		name="productName"
 		type="text"
 		class="form-control"
+		oninput="filterProducts(this)"
+        onclick="loadProductsList(this);"
 		required
 	  />
 	</td>
@@ -194,6 +216,7 @@ function onAdd(){
   </tr>`;
   tbody = document.querySelector("tbody");
   tbody.insertAdjacentHTML('beforeend',markup);
+  rowCount++;
 }
 	
 function onDelete(e) {
@@ -213,6 +236,7 @@ function onDelete(e) {
 //table.addEventListener("click", onDelete())
 
 function calc(e) {
+	console.log("Inside on calc");
 	let index = e.parentElement.parentElement.rowIndex - 1;
 	console.log(e.parentElement.parentElement.rowIndex);
 	let qty = document.getElementsByName("qty")[index].value;
@@ -331,4 +355,64 @@ function calcSubTotal() {
 			  }
 		  }
 	  }
+  }
+
+  function loadProductsList(pEvent) {
+	productList.innerHTML = " ";
+	productList.style.display = "block";
+	fetch("http://localhost:3000/products")
+	  .then((response) => response.json())
+	  .then((products) => {
+		console.log(products);
+		showProducts(products, pEvent);
+	  });
+  
+	function showProducts(products, pEvent) {
+	  const ul = document.createElement("ul");
+	  ul.innerHTML = " ";
+	  ul.className = "list-group";
+	  for (let product of products) {
+		const li = document.createElement("li");
+		li.className = "list-group-item";
+		li.id = "productList";
+		li.innerText = product.name;
+		li.onclick = function () {
+		  selectProduct(pEvent, this);
+		};
+		ul.appendChild(li);
+		productList.appendChild(ul);
+	  }
+	}
+  }
+  
+  //productName.oninput = filterProducts;
+  function filterProducts(e) {
+	const liElements = document.getElementsByClassName("list-group-item");
+	for (let li of liElements) {
+	  const currentProductName = li.innerText.toLowerCase();
+	  const searchedProductName = e.value.toLocaleLowerCase();
+	  if (!currentProductName.includes(searchedProductName)){
+		li.setAttribute("hidden", true);
+	  }
+	  else li.removeAttribute("hidden");
+	}
+  }
+  
+  function selectProduct(pEvent, e) {
+	pEvent.value = e.innerText;
+	productList.style.display = "none";
+	//populateHsnCode(productName.value);
+  }
+  
+  function populateHsnCode(productName){
+	fetch("http://localhost:3000/products")
+	  .then((response) => response.json())
+	  .then((products) => setHsncode(productName, products));
+  
+	function setHsncode(productName, products) {
+	  for (let product of products) {
+		if (product.name === productName) {
+		}
+	  }
+	}
   }

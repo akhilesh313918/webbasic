@@ -9,18 +9,21 @@ let invoiceNum = document.getElementById("invoiceNum");
 let productList = document.getElementById("productList");
 let productName = document.getElementById("productName");
 let rowIndex;
+let rowCount = 1;
 
 function getLatestInvoiceId() {
   fetch("http://localhost:3000/invoiceid")
     .then((response) => response.json())
     .then((data) => {
       let latestInvoiceNum = data[0].id;
-      invoiceNum.value = +(latestInvoiceNum);
+      invoiceNum.value = +(latestInvoiceNum) + (+1);
+      console.log("invoiceNum.value "+invoiceNum.value);
     });
 }
 getLatestInvoiceId();
 
-invoiceForm.addEventListener("submit", (e) => {
+function create(){
+invoiceForm.addEventListener('submit', e => {
   e.preventDefault();
 
   const formData = new FormData(invoiceForm);
@@ -28,7 +31,8 @@ invoiceForm.addEventListener("submit", (e) => {
   // 	console.log(item);
   // }
 
-  invoice.id = +(formData.get("invoiceNum"));
+  invoice.id = invoiceNum.value;
+  console.log("invoice.id  - " + invoice.id);
 
   invoice.customerName = formData.get("customerName");
   invoice.addressAndPhone = formData.get("Address&Phone");
@@ -97,7 +101,11 @@ invoiceForm.addEventListener("submit", (e) => {
 
   console.log("invoice data -> " + JSON.stringify(invoice));
   createUser(invoice);
+  console.log(e);
+  alert(e);
+  e.preventDefault();
 });
+}
 
 var invoice = {
   id: Number,
