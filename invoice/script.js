@@ -131,14 +131,14 @@ invoiceForm.addEventListener('submit', e => {
   // invoice.items.push(item);
 
   console.log("invoice data -> " + JSON.stringify(invoice));
-  createUser(invoice);
+  createInvoice(invoice);
   console.log(e);
   alert(e);
   // e.preventDefault();
 });
 }
 
-const createUser = async (invoice) => {
+const createInvoice = async (invoice) => {
   let bodydata = invoice;
 
   const options = {
