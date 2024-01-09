@@ -78,11 +78,6 @@ invoiceForm.addEventListener('submit', e => {
 
     //gets amount of cells of current row
     var cellLength = oCells.length;
-    //loops through each cell in current row
-    // for(var j = 1; j < cellLength-1; j++){
-    // 	/* get your cell info here */
-    // 	var cellVal = oCells.item(j).firstChild.value;
-    // 	console.log("j - "+j);
     console.log(
       "cell data - " + oCells.item(1).getElementsByTagName("input")[0].value
     );
@@ -112,18 +107,6 @@ invoiceForm.addEventListener('submit', e => {
       "cell data - " + oCells.item(6).getElementsByTagName("input")[0].value
     );
     item.total = oCells.item(6).getElementsByTagName("input")[0].value;
-
-    // item.push(oCells.item(j).firstChild.value);
-    // if(item.length > 6){
-    // 	item.splice(0,item.length)
-    // }
-    // }
-    // item.productName = formData.get("productName");
-    // item.description = formData.get("description");
-    // item.hsncode = formData.get("hsncode");
-    // item.quantity = formData.get("qty");
-    // item.price = formData.get("rate");
-    // item.total = formData.get("total");
     invoice.items.push(item);
     item = {};
   }
@@ -132,9 +115,7 @@ invoiceForm.addEventListener('submit', e => {
 
   console.log("invoice data -> " + JSON.stringify(invoice));
   createInvoice(invoice);
-  console.log(e);
-  alert(e);
-  // e.preventDefault();
+  invoiceForm.reset();
 });
 }
 
@@ -148,7 +129,7 @@ const createInvoice = async (invoice) => {
     },
     body: JSON.stringify(bodydata),
   };
-  const url = "http://localhost:3000/invoices";
+  const url = "http://localhost:8080/api/invoice/save";
   const response = await fetch(url, options);
   const data = await response.json();
   return data;

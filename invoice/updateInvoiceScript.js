@@ -9,6 +9,11 @@ let table = document.querySelector("table");
 let customerList = document.getElementById("customerList");
 let productList = document.getElementById("productList");
 let productName = document.getElementById("productName");
+let subtotal = document.getElementById("subtotal");
+let cgst = document.getElementById("cgst");
+let sgst = document.getElementById("sgst");
+let igst = document.getElementById("igst");
+let netotal = document.getElementById("nettotal");
 let rowIndex;
 let rowCount = 1;
 
@@ -38,8 +43,8 @@ let item = {
 function onPageLoad(){
 	console.log("invoiceId - " + sessionStorage.getItem("invoiceId"));
       let id = sessionStorage.getItem("invoiceId");
-      console.log("http://localhost:3000/invoices/" + id);
-      fetch("http://localhost:3000/invoices/" + id)
+      console.log("http://localhost:8080/api/invoice/" + id);
+      fetch("http://localhost:8080/api/invoice/" + id)
         .then((res) => {
           console.log(res.json);
           return res.json();
@@ -50,7 +55,12 @@ function onPageLoad(){
 		  customerName.value = data.customerName;
 		  addressNPhone.value = data.addressAndPhone;
 		  date.value = data.date;
-		  gstNum.value = data.gstNum;	
+		  gstNum.value = data.gstNum;
+		  subtotal.value = data.subtotal;	
+		  cgst.value = data.cgst;
+		  sgst.value = data.sgst;
+		  igst.value = data.igst;
+		  netotal.value = data.netotal;
 
 		  console.log("item arr lengths is "+data.items.length);
           //let rowCount = 1;
@@ -91,11 +101,11 @@ invoiceForm.addEventListener("submit", (e) => {
 	invoice.addressAndPhone = formData.get("Address&Phone");
 	invoice.gstNum = formData.get("gstNum");
 	invoice.date = formData.get("date").toString();
-	invoice.subtotal = document.getElementById("subtotal").value;
-  invoice.cgst = document.getElementById("cgst").value;
-  invoice.sgst = document.getElementById("sgst").value;
-  invoice.igst = document.getElementById("igst").value;
-  invoice.netotal = document.getElementById("nettotal").value;
+	invoice.subtotal = subtotal.value;
+  invoice.cgst = cgst.value;
+  invoice.sgst = sgst.value;
+  invoice.igst = igst.value;
+  invoice.netotal = netotal.value;
   
 	let rowLegnth = table.rows.length;
 	console.log("Table length is " + rowLegnth);
@@ -160,7 +170,7 @@ const modify = async(invoice, id)=> {
         },
         body: JSON.stringify(bodydata)
     };
-    const url = 'http://localhost:3000/invoices/'+id;
+    const url = 'http://localhost:8080/api/invoice/update/'+id;
     const response = await fetch(url, options);
     const data = await response.json();
     return data;
