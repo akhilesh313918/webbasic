@@ -51,13 +51,13 @@
           return res.json();
         })
         .then((data) => {
-          console.log(data)
+          console.log(data);
           data.forEach((invoice) => {
             const markup = ` <tr>
             <th scope="row">${invoice.id}</th>
             <td>${invoice.customerName}</td>
             <td>${invoice.date}</td>
-            <td><i class="fa-solid fa-pen-to-square" onclick="onEdit(${invoice.id})"></i><span> </span><i class="fa-solid fa-trash p-2" onclick="onDelete(${invoice.id})"></i></td>
+            <td><i class="fa-solid fa-file-invoice p-2" onclick="viewInvoice(${invoice.id})"></i><span> </span><i class="fa-solid fa-pen-to-square" onclick="onEdit(${invoice.id})"></i><span> </span><i class="fa-solid fa-trash p-2" onclick="onDelete(${invoice.id})"></i></td>
           </tr>`;
             document
               .querySelector("tbody")
@@ -73,6 +73,23 @@
 
       function onDelete(id) {
         console.log(id);
+      }
+
+      function viewInvoice(id) {
+        let pdfByteArray;
+        fetch('http://localhost:8080/api/invoice/'+id)
+        .then(res => {
+          return res.json();
+        })
+        .then(data => {
+          console.log(data);
+          pdfByteArray = data.pdfData;
+          console.log("pdfByteArray - "+pdfByteArray);
+        let pdfAsDataUri = "data:application/pdf;base64," + pdfByteArray;
+        window.open(pdfAsDataUri);
+        //location.reload();
+        })
+        
       }
     </script>
   </body>
