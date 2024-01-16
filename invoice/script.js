@@ -35,11 +35,12 @@ let item = {
 };
 
 function getLatestInvoiceId() {
-  fetch("http://localhost:3000/invoiceid")
+  fetch("http://localhost:8080/api/getInvoiceId")
     .then((response) => response.json())
     .then((data) => {
-      let latestInvoiceNum = data[0].id;
-      invoiceNum.value = +(latestInvoiceNum) + (+1);
+      console.log(data);
+      //let latestInvoiceNum = data;
+      invoiceNum.value = data;
       console.log("invoiceNum.value "+invoiceNum.value);
     });
 }
@@ -281,7 +282,7 @@ function calcNetTotal() {
 function loadCustomer() {
   customerList.innerHTML = " ";
   customerList.style.display = "block";
-  fetch("http://localhost:3000/customers")
+  fetch("http://localhost:8080/api/customers")
     .then((response) => response.json())
     .then((customers) => showCustomers(customers));
 
@@ -321,15 +322,15 @@ function selectCustomer(e) {
 }
 
 function populateAddressGst(customerName) {
-  fetch("http://localhost:3000/customers")
+  fetch("http://localhost:8080/api/customers")
     .then((response) => response.json())
     .then((customers) => setCustomerAddAndGst(customerName, customers));
 
   function setCustomerAddAndGst(customerName, customers) {
     for (let customer of customers) {
       if (customer.customerName === customerName) {
-        AddressNPhone.value = customer.addressAndPhone;
-        gstNum.value = customer.gst;
+        AddressNPhone.value = customer.address +","+customer.mobileNumber;
+        gstNum.value = customer.gstNumber;
       }
     }
   }
@@ -338,7 +339,7 @@ function populateAddressGst(customerName) {
 function loadProductsList(pEvent) {
   productList.innerHTML = " ";
   productList.style.display = "block";
-  fetch("http://localhost:3000/products")
+  fetch("http://localhost:8080/api/products")
     .then((response) => response.json())
     .then((products) => {
       console.log(products);
@@ -353,7 +354,7 @@ function loadProductsList(pEvent) {
       const li = document.createElement("li");
       li.className = "list-group-item";
       li.id = "productList";
-      li.innerText = product.name;
+      li.innerText = product.productName;
       li.onclick = function () {
         selectProduct(pEvent, this);
       };
@@ -383,13 +384,14 @@ function selectProduct(pEvent, e) {
 }
 
 function populateHsnCode(productName){
-  fetch("http://localhost:3000/products")
+  fetch("http://localhost:8080/api/products")
     .then((response) => response.json())
     .then((products) => setHsncode(productName, products));
 
   function setHsncode(productName, products) {
     for (let product of products) {
-      if (product.name === productName) {
+      if (product.productName === productName) {
+        console.log("inside sethsncode");
       }
     }
   }

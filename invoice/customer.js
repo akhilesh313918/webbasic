@@ -1,24 +1,24 @@
 const customerForm = document.getElementById("customerForm");
 let customer = {
     id: Number,
-    productName : String,
+    customerName : String,
     address : String,
-    mobNumber : Number,
-    gstNum : Number
+    mobileNumber : Number,
+    gstNumber : Number
 }
 
 function addCustomer(){
     customerForm.addEventListener('click', e =>{
         e.preventDefault();
         const customerFormData = new FormData(customerForm);
-        customer.id = 10;
+        //customer.id = 10;
         customer.customerName = document.getElementById("customerName").value;
         customer.address = document.getElementById("address").value;
-        customer.mobNumber = document.getElementById("mobNumber").value;
-        customer.gstNum = document.getElementById("gstNumber").value;     
+        customer.mobileNumber = document.getElementById("mobNumber").value;
+        customer.gstNumber = document.getElementById("gstNumber").value;     
         createCustomer(customer);
         console.log(JSON.stringify(customer));
-        alert();
+        //alert();
     })
 }
 
@@ -32,7 +32,7 @@ const createCustomer = async (customer) => {
       },
       body: JSON.stringify(bodydata),
     };
-    const url = "http://localhost:3000/customers";
+    const url = "http://localhost:8080/api/customer";
     const response = await fetch(url, options);
     const data = await response.json();
     return data;

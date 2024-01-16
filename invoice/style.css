@@ -5,3 +5,7 @@ i:hover{
 .addRow{
     margin-top: 10px;
 }
+
+.loader{
+    justify-content: center;
+}

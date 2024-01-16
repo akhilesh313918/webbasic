@@ -15,7 +15,6 @@ function addProduct(){
         product.hsncode = document.getElementById("hsncode").value;     
         createProduct(product);
         console.log(JSON.stringify(product));
-        alert();
     })
 }
 
@@ -29,7 +28,7 @@ const createProduct = async (product) => {
       },
       body: JSON.stringify(bodydata),
     };
-    const url = "http://localhost:3000/products";
+    const url = "http://localhost:8080/api/product";
     const response = await fetch(url, options);
     const data = await response.json();
     return data;
